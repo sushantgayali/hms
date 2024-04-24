@@ -1,7 +1,7 @@
 builds:
-  - src: first.html
+  - src: index.html
     use: static
 
 routes:
   - src: /*
-    dest: first.html
+    dest: index.html
