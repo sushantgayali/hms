@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Form</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  .login {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+
+  .login h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+
+  .login label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .login input[type="text"],
+  .login input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .login button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .login button:hover {
+    background-color: #0056b3;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .signup-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .signup-link a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <section class="login" id="login">
+    <h2>Login</h2>
+    <label for="username">Username (Email):</label>
+    <input type="text" id="username" name="username" required>
+    <span class="error-message" id="username-error"></span>
+  
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <span class="error-message" id="password-error"></span>
+  
+    <button type="button" id="login-button">Login</button>
+  
+    <div class="signup-link">
+      <a href="signup.html">New user? Sign up here</a>
+    </div>
+  </section>
+  
+  <script>
+  document.getElementById('login-button').addEventListener('click', function() {
+      if (validateForm()) {
+          validateAndSendData();
+      }
+  });
+  
+  function validateForm() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value;
+      
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+      if (!emailRegex.test(username)) {
+          alert("Please enter a valid email address");
+          return false;
+      }
+  
+      if (password.length < 6) {
+          alert("Password must be at least 6 characters long");
+          return false;
+      }
+      
+      return true;
+  }
+  
+  function validateAndSendData() {
+      var username = document.getElementById("username").value;
+      var password = document.getElementById("password").value; 
+    
+      // Data to be sent in the request body
+      var data = {
+          username: username,
+          password: password
+      };
+  
+      fetch('http://localhost:3000/user/signin', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => {
+          if (response.status === 400) {
+              console.log(response.status);
+              alert('Invalid details');
+          } else if (response.status === 200) {
+              alert('Login is successful');
+              window.location.href = 'first.html';
+          } else {
+              throw new Error('Unexpected status code: ' + response.status);
+          }
+      })
+      .then(data => {
+          // Handle response data
+          console.log('Success:', data);
+      })
+      .catch(error => {
+          // Handle errors
+          console.error('Error:', error);
+      });
+  }
+  </script>
+
+
+</body>
+</html>

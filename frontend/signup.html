@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup Form</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  .login {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+
+  .login h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+
+  .login label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+
+  .login input[type="text"],
+  .login input[type="password"],
+  .login input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .login button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .login button:hover {
+    background-color: #0056b3;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .signup-link {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .signup-link a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+<section class="login">
+  <h2>SignUp</h2>
+  <label for="username">Username (Email):</label>
+  <input type="text" id="username" name="username" required>
+  <span class="error-message" id="username-error"></span>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required>
+  <span class="error-message" id="password-error"></span>
+
+  <label for="patient-name">Patient Name:</label>
+  <input type="text" id="patient-name" name="patient-name" required>
+  <span class="error-message" id="patient-name-error"></span>
+
+  <label for="contact-number">Patient's Contact Number:</label>
+  <input type="tel" id="contact-number" name="contact-number" required>
+  <span class="error-message" id="contact-number-error"></span>
+  <br>    <br>    
+  <button id="signup">SignUp</button>
+
+  
+</section>
+  
+  <script>
+    document.getElementById('signup').addEventListener('click', function() {
+        if (validateForm()) {
+        ValidataAndSendData();
+        }
+    });
+
+    function validateForm() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+    var patientName = document.getElementById("patient-name").value;
+    var contactNumber = document.getElementById("contact-number").value;
+
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var nameRegex = /^[A-Za-z\s]+$/;
+    var contactRegex = /^\d{10}$/;
+
+    if (!emailRegex.test(username)) {
+        alert("Please enter a valid email address");
+        return false;
+    }
+
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters long");
+        return false;
+    }
+
+    if (!nameRegex.test(patientName) || patientName.length < 4) {
+        alert("Please enter a valid patient name (at least 4 characters, only alphabets and spaces)");
+        return false;
+    }
+
+    if (!contactRegex.test(contactNumber)) {
+        alert("Please enter a valid 10-digit contact number");
+        return false;
+    }
+
+    return true;
+}
+
+
+  function ValidataAndSendData(){
+    document.getElementById('signup').addEventListener('click', function() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var patientName = document.getElementById("patient-name").value;
+        var contactNumber = document.getElementById("contact-number").value;
+    
+        // Data to be sent in the request body
+        var data = {
+        username: username,
+        password: password,
+        patientName: patientName,
+        contactNumber: contactNumber
+        };
+        console.log(data);    
+    
+        fetch('http://localhost:3000/user/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.status === 400) {
+        console.log(response.status);
+        alert('Invalid details');
+        } else if (response.status === 200) {
+        alert('Successfully created the user');
+        window.location.href = 'first.html';
+        } else {
+        throw new Error('Unexpected status code: ' + response.status);
+        }
+        })
+        .then(data => {
+        // Handle response data
+        console.log('Success:', data);
+        })
+        .catch(error => {
+        // Handle errors
+        console.error('Error:', error);
+    });
+  });
+
+}
+  </script>
+  
