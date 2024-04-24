@@ -4,6 +4,10 @@
     ],
     "routes": [
       { "src": "/(.*)", "dest": "first.html" }
-    ]
+    ],
+    "static": {
+      "source": ".",
+      "ignore": ["first.html"]
+    }
   }
   
