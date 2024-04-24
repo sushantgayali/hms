@@ -1,13 +1,14 @@
 {
     "builds": [
-      { "src": "first.html", "use": "@vercel/static" }
+      { "src": "*.html", "use": "@vercel/static" },
+      { "src": "*.css", "use": "@vercel/static" }
     ],
     "routes": [
-      { "src": "/(.*)", "dest": "first.html" }
+      { "src": "/(.*)", "dest": "/$1" }
     ],
     "static": {
       "source": ".",
-      "ignore": ["first.html"]
+      "exclude": ["!**/*.{html,css}", "!vercel.json"]
     }
   }
   
